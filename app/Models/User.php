@@ -19,8 +19,6 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
-        'email',
-        'password',
         'phone',
         'login_code'
      ];
@@ -44,4 +42,10 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+    public function trips(){
+        return $this->belongsToMany(Trip::class);
+    }
+    public function driver(){
+        return $this->belongsTo(Driver::class);
+    }
 }
