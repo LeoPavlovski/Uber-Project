@@ -13,8 +13,7 @@ return new class extends Migration
     {
         Schema::create('drivers', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id');
-            $table->foreign('user_id')->references('id')->on('users');
+            $table->string('name')->nullable();
             $table->year('year');
             $table->string('model');
             $table->string('license_plate');
@@ -23,7 +22,7 @@ return new class extends Migration
         });
     }
 
-    /**
+     /**
      * Reverse the migrations.
      */
     public function down(): void
