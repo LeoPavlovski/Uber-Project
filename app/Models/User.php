@@ -20,7 +20,7 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'phone',
-        'login_code'
+        'login_code',
      ];
 
     /**
@@ -29,9 +29,15 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $hidden = [
-        'password',
+        'login_code',
         'remember_token',
     ];
+
+    //The twillio is looking for a column phone_number, but i have the column as the phone. So im changing the column here to phone_number
+    public function routeNotificationForTwilio()
+    {
+        return $this->phone;
+    }
 
     /**
      * The attributes that should be cast.
@@ -44,8 +50,5 @@ class User extends Authenticatable
     ];
     public function trips(){
         return $this->belongsToMany(Trip::class);
-    }
-    public function driver(){
-        return $this->belongsTo(Driver::class);
     }
 }
