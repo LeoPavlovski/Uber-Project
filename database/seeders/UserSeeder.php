@@ -11,10 +11,10 @@ class UserSeeder extends Seeder
 {
     /**
      * Run the database seeds.
-     *  'name',
-       'phone',
-    'driver_id',
-    'login_code'
+    'name',
+    'phone',
+    'login_code',
+
      */
     public function run(): void
     {
