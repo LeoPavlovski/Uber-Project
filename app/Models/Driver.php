@@ -14,7 +14,8 @@ class Driver extends Model
         'model',
         'license_plate',
         'color',
-        'name'
+        'name',
+        'city'
     ];
     public function user(){
         return $this->belongsTo(User::class);

@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name')->nullable();
             $table->year('year');
+            $table->string('city');
             $table->string('model');
             $table->string('license_plate');
             $table->string('color');

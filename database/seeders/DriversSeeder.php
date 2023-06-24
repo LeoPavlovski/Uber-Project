@@ -26,28 +26,32 @@ class DriversSeeder extends Seeder
               'year'=>2013,
               'model'=>'Aston Martin',
               'license_plate'=>"1234MKD",
-              'color'=>'White'
+              'color'=>'White',
+              'city'=>'Tetovo'
             ],
             [
 
                 'year'=>2004,
                 'model'=>'Opel',
                 'license_plate'=>"1234MKD",
-                'color'=>'White'
+                'color'=>'White',
+                'state'=>'Skopje',
             ],
             [
 
                 'year'=>2011,
                 'model'=>'Mitsubishi',
                 'license_plate'=>"1234MKD",
-                'color'=>'White'
+                'color'=>'White',
+                'state'=>'Strumica'
             ],
             [
 
                 'year'=>2007,
                 'model'=>'Ford',
                 'license_plate'=>"1234MKD",
-                'color'=>'White'
+                'color'=>'White',
+                'state'=>'Gostivar'
             ],
         ]);
     }

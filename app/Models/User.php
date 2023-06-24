@@ -51,4 +51,7 @@ class User extends Authenticatable
     public function trips(){
         return $this->belongsToMany(Trip::class);
     }
+    public function driver(){
+        return $this->belongsTo(Driver::class);
+    }
 }
