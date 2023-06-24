@@ -27,7 +27,8 @@ class DriversSeeder extends Seeder
               'model'=>'Aston Martin',
               'license_plate'=>"1234MKD",
               'color'=>'White',
-              'city'=>'Tetovo'
+              'city'=>'Tetovo',
+              'user_id'=>1,
             ],
             [
 
@@ -36,6 +37,7 @@ class DriversSeeder extends Seeder
                 'license_plate'=>"1234MKD",
                 'color'=>'White',
                 'state'=>'Skopje',
+                'user_id'=>1,
             ],
             [
 
@@ -43,7 +45,8 @@ class DriversSeeder extends Seeder
                 'model'=>'Mitsubishi',
                 'license_plate'=>"1234MKD",
                 'color'=>'White',
-                'state'=>'Strumica'
+                'state'=>'Strumica',
+                 'user_id'=>1,
             ],
             [
 
@@ -51,7 +54,8 @@ class DriversSeeder extends Seeder
                 'model'=>'Ford',
                 'license_plate'=>"1234MKD",
                 'color'=>'White',
-                'state'=>'Gostivar'
+                'state'=>'Gostivar',
+                'user_id'=>1,
             ],
         ]);
     }

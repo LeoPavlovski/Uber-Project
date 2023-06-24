@@ -20,7 +20,7 @@ class DriverController extends Controller
      */
     public function index()
     {
-        $drivers = Driver::all();
+        $drivers = Driver::with('user')->get();
         return DriverResource::collection($drivers);
     }
     /**
@@ -28,26 +28,51 @@ class DriverController extends Controller
      */
     public function store(Request $request)
     {
-        $driver = Driver::create([
-           'name'=>$request->name,
-            'year'=>$request->year,
-            'model'=>$request->model,
-            'license_plate'=>$request->license_plate,
-            'color'=>$request->color,
-            'city'=>$request->city,
+        $validator = Validator::make($request->all(),[
+           'name'=>'required|string',
+            'year'=>'required|integer|between:2010,2023',
+            'model'=>'required|string',
+            'license_plate'=>'required',
+            'color'=>'required|string',
+            'city'=>'required|string'
         ]);
-        return new DriverResource($driver);
+        if($validator->fails()){
+            return response()->json([
+                'errors'=>$validator->errors()
+            ]);
+        }
+        //the same logic is going to go here osn the creation
+        $city = $request->city;
+        if($city === 'Skopje'){
+            $licensePlate = $request->license_plate;
+            if(!preg_match('/^SK\d{3,4}[A-Z]{2}$/', $licensePlate)){
+                return response()->json([
+                    "message"=>'Incorrect License plate'
+                ]);
+            }
+            return response()->json([
+               'message'=>'Driver Created!'
+            ]);
+        }
+        else{
+            $driver = Driver::create([
+                'name'=>$request->name,
+                'year'=>$request->year,
+                'model'=>$request->model,
+                'license_plate'=>$request->license_plate,
+                'color'=>$request->color,
+                'city'=>$request->city,
+            ]);
+          return DriverResource::collection($driver);
+        }
     }
     /**
      * Display the specified resource.
      */
-    public function show(Request $request)
+    public function show()
     {
-        //Takes the user
-        $user=$request->user();
-        //Associated driver model
-        $user->load('driver');
-        return $user;
+       $driver = Driver::with('user')->first();
+       return new DriverResource($driver);
     }
     /**
      * Update the specified resource in storage.
@@ -79,7 +104,7 @@ class DriverController extends Controller
             'color'=>$request->color,
 
         ]);
-        return new DriverResource($driver);
+        return DriverResource::collection($driver);
     }
     /**
      * Remove the specified resource from storage.
