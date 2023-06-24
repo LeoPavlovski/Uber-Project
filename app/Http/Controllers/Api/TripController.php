@@ -38,6 +38,7 @@ class TripController extends Controller
             'latitude'=>$request->input('origin.latitude'),
             'longitude'=>$request->input('origin.longitude'),
             'address'=>$request->input('origin.address'),
+
         ];
         $trips = Trip::create([
             'user_id' => $request->user_id,
@@ -45,8 +46,6 @@ class TripController extends Controller
             'origin'=>$origin,
             'destination_name' => $request->destination_name
         ]);
-
-
         return new TripResource($trips);
     }
 
