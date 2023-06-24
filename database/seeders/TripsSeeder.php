@@ -10,7 +10,7 @@ class TripsSeeder extends Seeder
 {
     /**
      * Run the database seeds.
-     *    'user_id',
+     *   'user_id',
     'driver_id',
     'is_started',
     'is_completed',
@@ -18,6 +18,7 @@ class TripsSeeder extends Seeder
     'destination',
     'destination_name',
     'driver_location'
+
      */
     public function run(): void
     {
