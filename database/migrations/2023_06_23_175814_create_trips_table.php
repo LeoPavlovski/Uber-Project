@@ -19,7 +19,7 @@ return new class extends Migration
             $table->foreign('driver_id')->references('id')->on('drivers');
             $table->boolean('is_started')->default(false);
             $table->boolean('is_completed')->default(false);
-            $table->json('origin')->nullable();
+            $table->json('origin');
             $table->json('destination')->nullable();
             $table->string('destination_name')->nullable();
             $table->json('driver_location')->nullable();
