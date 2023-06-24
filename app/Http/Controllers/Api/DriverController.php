@@ -79,6 +79,20 @@ class DriverController extends Controller
      */
     public function update(Request $request, $driverId)
     {
+        //TODO implement validation in the update section
+        $validator = Validator::make($request->all(),[
+            'name'=>'required|string',
+            'year'=>'required|integer|between:2010,2023',
+            'model'=>'required|string',
+            'license_plate'=>'required',
+            'color'=>'required|string',
+            'city'=>'required|string'
+        ]);
+        if($validator->fails()){
+            return response()->json([
+                'errors'=>$validator->errors()
+            ]);
+        }
 //       Some logic to validate the drivers license based on the state that they are driving in.
         $driver = Driver::find($driverId);
         $city = $driver->city;

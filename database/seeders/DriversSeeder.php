@@ -37,7 +37,7 @@ class DriversSeeder extends Seeder
                 'license_plate'=>"1234MKD",
                 'color'=>'White',
                 'state'=>'Skopje',
-                'user_id'=>1,
+                'user_id'=>2,
             ],
             [
 
@@ -46,7 +46,7 @@ class DriversSeeder extends Seeder
                 'license_plate'=>"1234MKD",
                 'color'=>'White',
                 'state'=>'Strumica',
-                 'user_id'=>1,
+                 'user_id'=>3,
             ],
             [
 
@@ -55,7 +55,7 @@ class DriversSeeder extends Seeder
                 'license_plate'=>"1234MKD",
                 'color'=>'White',
                 'state'=>'Gostivar',
-                'user_id'=>1,
+                'user_id'=>5,
             ],
         ]);
     }

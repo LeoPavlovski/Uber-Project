@@ -22,7 +22,6 @@ class UserSeeder extends Seeder
            [
                'name'=>'Leo',
                'phone'=>'+423432',
-
            ],
             [
                 'name'=>'Marko',
@@ -38,7 +37,12 @@ class UserSeeder extends Seeder
                 'name'=>'Sefer',
                 'phone'=>'+5252',
 
-            ]
+            ],
+            [
+                'name'=>'adawdas',
+                'phone'=>'+21412412',
+            ],
+
         ]);
     }
 }
