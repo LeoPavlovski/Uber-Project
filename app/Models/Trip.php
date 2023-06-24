@@ -18,6 +18,9 @@ class Trip extends Model
       'destination_name',
       'driver_location'
     ];
+    protected $casts = [
+      'origin'=>'json'
+    ];
     public function driver(){
         return $this->belongsTo(Driver::class);
     }
