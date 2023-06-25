@@ -44,7 +44,7 @@ class LoginNeedsVerification extends Notification
         $notifiable->update([
            'login_code'=>$loginCode,
         ]);
-        return (new TwilioSmsMessage())->content("Enter this code to validate your account. Зејтинот е на наша сметка. {$loginCode}");
+        return (new TwilioSmsMessage())->content("Don't share this code with anyone {$loginCode}");
     }
 
     /**

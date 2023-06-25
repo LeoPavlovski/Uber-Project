@@ -40,6 +40,13 @@ Route::middleware('auth:sanctum')->group(function(){
     Route::post('/createTrip',[TripController::class, 'store']);
     Route::put('/updateTrip/{trip}',[TripController::class, 'update']);
     Route::delete('/deleteTrip/{trip}',[TripController::class, 'destroy']);
+
+    Route::post('/trip/{trip}/accept', [TripController::class, 'accept']);
+    Route::post('/trip/{trip}/start', [TripController::class, 'start']);
+    Route::post('/trip/{trip}/end', [TripController::class, 'end']);
+    Route::post('/trip/{trip}/location', [TripController::class, 'location']);
+
+
 });
 
 

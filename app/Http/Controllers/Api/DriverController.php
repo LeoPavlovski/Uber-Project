@@ -28,43 +28,72 @@ class DriverController extends Controller
      */
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(),[
-           'name'=>'required|string',
-            'year'=>'required|integer|between:2010,2023',
-            'model'=>'required|string',
-            'license_plate'=>'required',
-            'color'=>'required|string',
-            'city'=>'required|string'
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string',
+            'year' => 'required|integer|between:2010,2023',
+            'model' => 'required|string',
+            'license_plate' => 'required|string|unique:drivers,license_plate',
+            'color' => 'required|string',
+            'city' => 'required|string'
         ]);
-        if($validator->fails()){
+        if ($validator->fails()) {
             return response()->json([
-                'errors'=>$validator->errors()
+                'errors' => $validator->errors()
             ]);
         }
         //the same logic is going to go here osn the creation
         $city = $request->city;
-        if($city === 'Skopje'){
-            $licensePlate = $request->license_plate;
-            if(!preg_match('/^SK\d{3,4}[A-Z]{2}$/', $licensePlate)){
-                return response()->json([
-                    "message"=>'Incorrect License plate'
-                ]);
+        if ($validator->passes()) {
+            switch ($city) {
+                case "Skopje":
+                    $licensePlate = $request->license_plate;
+                    if (!preg_match('/^([sS][kK])\d{3,4}[A-Za-z]{2}$/', $licensePlate)) {
+                        return response()->json([
+                            'message' => 'Wrong plate for',
+                            'message2' => $city,
+                            'The correct format' => 'SK1234MK OR SK123MK'
+                        ]);
+                    } else {
+                        $driver = Driver::create([
+                            'name' => $request->name,
+                            'year' => $request->year,
+                            'model' => $request->model,
+                            'license_plate' => $request->license_plate,
+                            'color' => $request->color,
+                            'city' => $request->city,
+                            'user_id'=>$request->user_id,
+                        ]);
+                        return new DriverResource($driver);
+                    }
+                    break;
+
+                case "Tetovo":
+                    $licensePlate = $request->license_plate;
+                    if(!preg_match('/^([Tt][Tt])\d{3,4}[A-Za-z]{2}$/', $licensePlate)){
+                        return response()->json([
+                           'message'=>'Wrong Plate for',
+                           'message2'=>$city,
+                           'The correct format is '=> 'TT1234MK OR tt123mk'
+                        ]);
+                    }
+                    else {
+                        $driver = Driver::create([
+                            'name' => $request->name,
+                            'year' => $request->year,
+                            'model' => $request->model,
+                            'license_plate' => $request->license_plate,
+                            'color' => $request->color,
+                            'city' => $request->city,
+                            'user_id'=>$request->user_id,
+                        ]);
+                      return response()->json([
+                          'message'=>'Driver has been created!',
+                          'data'=>new DriverResource($driver)
+                      ]);
+                    }
             }
-            return response()->json([
-               'message'=>'Driver Created!'
-            ]);
         }
-        else{
-            $driver = Driver::create([
-                'name'=>$request->name,
-                'year'=>$request->year,
-                'model'=>$request->model,
-                'license_plate'=>$request->license_plate,
-                'color'=>$request->color,
-                'city'=>$request->city,
-            ]);
-          return DriverResource::collection($driver);
-        }
+
     }
     /**
      * Display the specified resource.
@@ -116,6 +145,7 @@ class DriverController extends Controller
             'model'=>$request->model,
             'license_plate'=>$request->license_plate,
             'color'=>$request->color,
+            'user_id'=>$request->user_id,
 
         ]);
         return DriverResource::collection($driver);
