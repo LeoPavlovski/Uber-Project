@@ -25,14 +25,12 @@ class TripResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'user_id' => $this->user_id,
-            'driver_id' => $this->driver_id,
-            'is_started' => $this->is_started,
-            'is_completed' => $this->is_completed,
-             'origin'=>$this->origin,
-            'destination' => $this->destination,
-            'destination_name' => $this->destination_name,
-            'driver_location' => $this->driver_location
+           'origin' => $this->origin,
+           'destination' => $this->destination,
+           'destination_name' => $this->destination_name,
+//            'user_id'=>$this->user->id,
+            'id'=>$this->id,
+            'user_id'=>$this->user->id,
         ];
     }
 }
