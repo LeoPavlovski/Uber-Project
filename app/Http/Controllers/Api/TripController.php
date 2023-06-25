@@ -3,6 +3,9 @@
 namespace App\Http\Controllers\Api;
 
 use App\Events\TripAccepted;
+use App\Events\TripEnded;
+use App\Events\TripLocationUpdated;
+use App\Events\TripStarted;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\TripResource;
 use App\Models\Trip;
@@ -130,8 +133,7 @@ class TripController extends Controller
        ]);
        $trip->load('driver.user');
        //new
-       TripAccepted::dispatch();
-
+       TripAccepted::dispatch($trip, $request->user());
        return $trip;
     }
     public function end( Trip $trip , Request $request)
@@ -149,8 +151,10 @@ class TripController extends Controller
           $trip->update([
              'is_completed'=>true
           ]);
+            TripEnded::dispatch($trip, $request->user());
             return response()->json([
-               'Trip Finished!'
+               'Trip Finished!',
+                'data'=> new TripResource($trip),
             ]);
         }
     }
@@ -172,6 +176,8 @@ class TripController extends Controller
                'driver_location'=>$request->driver_location
             ]);
             $trip->load('driver.user');
+            TripLocationUpdated::dispatch($trip, $request->user());
+
             return response()->json([
                 'message'=>'Driver Location Updated',
                 'data'=>new TripResource($trip)
@@ -188,14 +194,16 @@ class TripController extends Controller
                 'errors'=>$validate->errors()
             ]);
         }
-        //driver has started driving the passenger to the destination
-        //Destination -> json
-        //destiantion name
-        $trip->update([
-           //Do we need here the userId ? or just location ( destinations)
-            'is_started'=>true,
-        ]);
-        $trip->load('driver.user');
-        return new TripResource($trip);
+        if($validate->passes()){
+            $trip->update([
+                'is_started'=>true,
+            ]);
+            TripStarted::dispatch($trip, $request->user());
+            $trip->load('driver.user');
+            return response()->json([
+                'message'=>"Trip Started!",
+                'data'=>new TripResource($trip),
+            ]);
+        }
     }
 }
