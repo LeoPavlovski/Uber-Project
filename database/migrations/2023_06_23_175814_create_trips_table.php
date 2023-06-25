@@ -11,20 +11,20 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('trips', function (Blueprint $table) {
-            $table->id();
-            $table->unsignedBigInteger('user_id');
-            $table->foreign('user_id')->references('id')->on('users');
-            $table->unsignedBigInteger('driver_id');
-            $table->foreign('driver_id')->references('id')->on('drivers');
-            $table->boolean('is_started')->default(false);
-            $table->boolean('is_completed')->default(false);
-            $table->json('origin');
-            $table->json('destination')->nullable();
-            $table->string('destination_name')->nullable();
-            $table->json('driver_location')->nullable();
-            $table->timestamps();
-        });
+            Schema::create('trips', function (Blueprint $table) {
+                $table->id();
+                $table->unsignedBigInteger('user_id')->nullable();
+                $table->foreign('user_id')->references('id')->on('users');
+                $table->unsignedBigInteger('driver_id')->nullable();
+                $table->foreign('driver_id')->references('id')->on('drivers');
+                $table->boolean('is_started')->default(false);
+                $table->boolean('is_completed')->default(false);
+                $table->json('origin');
+                $table->json('destination')->nullable();
+                $table->string('destination_name')->nullable();
+                $table->json('driver_location')->nullable();
+                $table->timestamps();
+            });
     }
 
     /**
