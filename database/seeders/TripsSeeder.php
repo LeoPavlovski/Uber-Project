@@ -26,7 +26,7 @@ class TripsSeeder extends Seeder
 
       [
           [
-         'user_id'=>1,
+
          'driver_id'=>1,
           'origin'=>json_encode([
               'latitude'=>123.456,
@@ -36,7 +36,7 @@ class TripsSeeder extends Seeder
             'destination_name'=>"Tetovo-Skopje"
           ],
           [
-              'user_id'=>2,
+
               'driver_id'=>2,
               'origin'=>json_encode([
                   'latitude'=>123.456,
@@ -46,7 +46,7 @@ class TripsSeeder extends Seeder
               'destination_name'=>"Tetovo-Skopje"
             ],
           [
-              'user_id'=>3,
+
               'driver_id'=>3,
               'origin'=>json_encode([
                   'latitude'=>123.456,
@@ -56,7 +56,7 @@ class TripsSeeder extends Seeder
               'destination_name'=>"Tetovo-Skopje"
           ],
           [
-              'user_id'=>4,
+
               'driver_id'=>4,
               'origin'=>json_encode([
                   'latitude'=>123.456,
