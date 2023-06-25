@@ -9,8 +9,8 @@ class Trip extends Model
 {
     use HasFactory;
     protected $fillable =[
-      'user_id',
       'driver_id',
+        'user_id',
       'is_started',
       'is_completed',
       'origin',
@@ -19,12 +19,18 @@ class Trip extends Model
       'driver_location'
     ];
     protected $casts = [
-      'origin'=>'json'
+      'origin'=>'json',
+        'destination'=>'json',
+        'is_started'=>'boolean',
+        'is_completed'=>'boolean',
+        'driver_location'=>'array'
     ];
+    protected $with = ['user'];
     public function driver(){
         return $this->belongsTo(Driver::class);
     }
-    public function user(){
+    public function user()
+    {
         return $this->belongsTo(User::class);
     }
 }
