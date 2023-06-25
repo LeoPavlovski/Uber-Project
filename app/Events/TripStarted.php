@@ -2,6 +2,8 @@
 
 namespace App\Events;
 
+use App\Models\Trip;
+use App\Models\User;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PresenceChannel;
@@ -17,11 +19,13 @@ class TripStarted
     /**
      * Create a new event instance.
      */
-    public function __construct()
+    public $trip;
+    private $user;
+    public function __construct(Trip $trip , User $user)
     {
-        //
+        $this->trip=$trip;
+        $this->user=$user;
     }
-
     /**
      * Get the channels the event should broadcast on.
      *
@@ -30,7 +34,7 @@ class TripStarted
     public function broadcastOn(): array
     {
         return [
-            new PrivateChannel('channel-name'),
+            new PrivateChannel('passenger_'. $this->user->id),
         ];
     }
 }
