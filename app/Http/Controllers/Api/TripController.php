@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Events\TripAccepted;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\TripResource;
 use App\Models\Trip;
@@ -48,30 +49,28 @@ class TripController extends Controller
             'latitude'=>$request->input('origin.latitude'),
             'longitude'=>$request->input('origin.longitude'),
             'address'=>$request->input('origin.address'),
-
         ];
-        //json
-//        $destination = [
-//            ""
-//        ];
+        $destination=[
+            'latitude'=>$request->input('destination.latitude'),
+            'longitude'=>$request->input('destination.longitude')
+        ];
+
         //As a passenger
         if($validator->passes()){
-
+            // Retrieve the ID of the aut
+            $user_id = auth()->user()->id;
             $trips = Trip::create([
-                'user_id' => $request->user_id,
-                'driver_id' => $request->driver_id,
                 'origin'=>$origin,
                 'destination_name' => $request->destination_name,
-//                'destination'=>$destination,
+                'destination'=>$destination,
+                'user_id'=>$user_id
             ]);
            return response()->json([
-              'Trip Created',
-               'data'=>new TripResource($trips)
+               'Trip Created',
+               'data'=>new TripResource($trips->load('user'))
            ]);
         }
-
     }
-
     /**
      * Display the specified resource.
      */
@@ -130,23 +129,65 @@ class TripController extends Controller
           'driver_location'=>$request->driver_location,
        ]);
        $trip->load('driver.user');
+       //new
+       TripAccepted::dispatch();
 
        return $trip;
     }
     public function end( Trip $trip , Request $request)
     {
         //driver has ended the trip
+        $validate = Validator::make($request->all(),[
+           'is_completed'=>'required'
+        ]);
+        if($validate->fails()){
+            return response()->json([
+                'errors'=>$validate->errors()
+            ]);
+        }
+        if($validate->passes()){
+          $trip->update([
+             'is_completed'=>true
+          ]);
+            return response()->json([
+               'Trip Finished!'
+            ]);
+        }
     }
     public function location(Trip $trip , Request $request)
     {
         //update the drivers locations
         //we have to get the json here. (origin)
+        $validate=  Validator::make($request->all(),[
+            'driver_location'=>'required'
+        ]);
+        if($validate->fails()){
+            return response()->json([
+               //Failed to get the driver location
+                'message'=>'Failed to get the driver location'
+            ]);
+        }
+        if($validate->passes()){
+            $trip->update([
+               'driver_location'=>$request->driver_location
+            ]);
+            $trip->load('driver.user');
+            return response()->json([
+                'message'=>'Driver Location Updated',
+                'data'=>new TripResource($trip)
+            ]);
+        }
     }
     public function start(Trip $trip , Request $request)
     {
         $validate = Validator::make($request->all(),[
             'is_started'=>'required',
         ]);
+        if($validate->fails()){
+            return response()->json([
+                'errors'=>$validate->errors()
+            ]);
+        }
         //driver has started driving the passenger to the destination
         //Destination -> json
         //destiantion name
