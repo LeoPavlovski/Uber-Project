@@ -1,6 +1,6 @@
 <template>
 <div class="pt-16">
-  <h1 class="text-3xl font-semibold mb-4">Enter your phone number/loginCode</h1>
+  <h1 class="text-3xl font-semibold mb-4">Enter your phone number</h1>
 <!--  function-->
 <!--  Preventing any default manners by the -->
   <form v-if="!waitingOnVerification" action="#" @submit.prevent="handleLogin">
@@ -18,7 +18,8 @@
       </div>
     </div>
   </form>
-    <form action="#" @submit.prevent="handleVerification" v-else>
+
+    <form v-else action="#" @submit.prevent="handleVerification" >
         <div class="overflow-hidden shadow sm:rounded-md max-w-sm mx-auto text-left">
             <div class="bg-white px-4 py-5 sm:p-6">
                 <!--Validation here-->
@@ -43,23 +44,18 @@ import {vMaska} from 'maska'
 import {computed, onMounted, reactive, ref} from "vue"
 import axios from 'axios'
 //router to navigate the user to various routes
-
-const router = useRouter();
-
 import router from "@/router";
 // difference is that we are going to access only the phone
 const phone = ref(null);
 const waitingOnVerification = ref(false);
 
-// Life cycle
-onMounted(()=>{
-    //if the user has been logged in.
-    if(localStorage.getItem('token')){
-        router.push({
-            name:'landingView'
-        })
-    }
-});
+// onMounted(()=>{
+//     if (localStorage.getItem('token') && !waitingOnVerification.value) {
+//         router.push({
+//             name: 'LandingView'
+//         });
+//     }
+// });
 
 //Computed : generate reactive properties based on the values on different values
 
@@ -69,19 +65,18 @@ const credentials = reactive({
   phone:null,
   login_code:null
 })
-const formatedCredentials = computed(()=>{
+const getFormatedCredentials = ()=>{
     return {
         phone:credentials.phone.replaceAll(' ', '').replace('(','').replace(')','').replace('-',''),
         login_code : credentials.login_code
     }
-})
-
+}
 const handleLogin =()=>{
   //instead of the console.log
   //do axios.post (route to the api)
-  axios.post('http://localhost:8000/api/login',{
-    formatedCredentials
-})
+  axios.post('http://localhost:8000/api/login',
+      getFormatedCredentials()
+)
       .then((response)=>{
         console.log(response.data)
           waitingOnVerification.value=true;
@@ -92,20 +87,20 @@ const handleLogin =()=>{
   // console.log(data.phone)
 }
 const handleVerification = ()=>{
-    axios.post('http://localhost:8000/api/login/verify', {
-        formatedCredentials
-    })
+    axios.post('http://localhost:8000/api/login/verify',
+        getFormatedCredentials()
+    )
         .then((response)=>{
             console.log(response.data); //auth token
             localStorage.setItem('token',response.data) // Token from the console.
             //Determine if they want to be a driver or a passenger
             // TODO determine if the user has been already been logged in to the page
             router.push({
-                name:'landingView'
+                name:'index'
             })
         })
         .catch((error)=>{
-            alert(error.response.data.message)
+            alert(error)
         });
 }
 </script>
